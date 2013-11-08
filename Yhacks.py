@@ -3,51 +3,6 @@
 
 # <codecell>
 
-import time
-import cv2
-import cv2.cv as cv
- 
- 
-def draw_rects(img, rects, color):
-    for x1, y1, x2, y2 in rects:
-        cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
- 
- 
-def demo(img):
-    print ">>> Loading image..."
-    img_color = img
-    img_gray = cv2.cvtColor(img_color, cv.CV_RGB2GRAY)
-    img_gray = cv2.equalizeHist(img_gray)
-    #print in_fn, img_gray.shape
- 
-    print ">>> Detecting faces..."
-    start = time.time()
-    rects = detect(img_gray)
-    end = time.time()
-    print 'time:', end - start
-    img_out = img_color.copy()
-    draw_rects(img_out, rects, (0, 255, 0))
-    return img_out
- 
-def main():
-    cap = cv2.VideoCapture(0)
-    while cap.isOpened():
-        ret,img = cap.read()
-        image = demo(img)
-        cv2.imshow("lll",img)
-        k = cv.WaitKey(10);
-        if k == 'f':
-            break
- 
- 
-if __name__ == '__main__':
-    main()
-
-# <codecell>
-
-
-# <codecell>
-
 #!/usr/bin/env python
 
 import numpy as np
