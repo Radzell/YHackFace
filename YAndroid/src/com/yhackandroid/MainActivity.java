@@ -161,8 +161,8 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
         if (mDetectorType == JAVA_DETECTOR) {
             if (mJavaDetector != null)
-                mJavaDetector.detectMultiScale(mGray, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
-                        new Size(0, .2), new Size());
+                mJavaDetector.detectMultiScale(mGray, faces, 1.3, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
+                        new Size(mAbsoluteFaceSize, mAbsoluteFaceSize), new Size());
         }
         Rect[] facesArray = faces.toArray();
         for (int i = 0; i < facesArray.length; i++)
