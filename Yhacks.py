@@ -65,20 +65,26 @@ global frame
 global model
 global buttons
 global db
-db={1:["https://www.facebook.com/josh.makinen","https://plus.google.com/+JoshuaMakinen","https://twitter.com/JoshuaMakinen","http://www.linkedin.com/profile/view?id=289942967&trk=nav_responsive_tab_profile","https://github.com/makinj"]}
+db={1:["https://www.facebook.com/eoswald39"]\
+    ,2:["https://github.com/Newbrict","http://www.linkedin.com/pub/dimitar-dimitrov/65/158/837"]\
+    ,3:["https://www.facebook.com/colin.l.rice","https://github.com/c00w","http://www.linkedin.com/in/colinlrice"]\
+    ,6:["https://www.facebook.com/josh.makinen","https://plus.google.com/+JoshuaMakinen","https://twitter.com/JoshuaMakinen","http://www.linkedin.com/profile/view?id=289942967&trk=nav_responsive_tab_profile","https://github.com/makinj/"]}
 
-def draw_sprite(image, coor, color=0, radius=20, text=""):
+def draw_sprite(image, coor, color=0, radius=30, text="",icon=""):
     draw = ImageDraw.Draw(image)
-    x0=coor[0]-radius
-    x1=coor[0]+radius
-    y0=coor[1]-radius
-    y1=coor[1]+radius
-    if(color):
-        draw.ellipse((x0,y0,x1,y1),fill=color)
+    x0=int(coor[0]-radius)
+    x1=int(coor[0]+radius)
+    y0=int(coor[1]-radius)
+    y1=int(coor[1]+radius)
+    if icon:
+        image.paste(icon,(x0,y0),mask=icon)
     else:
-        draw.ellipse((x0,y0,x1,y1))
-    if(text):
-        draw.text(coor,text)
+        if color:
+            draw.ellipse((x0,y0,x1,y1),fill=color)
+        else:
+            draw.ellipse((x0,y0,x1,y1))
+        if(text):
+            draw.text(coor,text)
     return image
 def draw_sprites(image, data):
     for face in data:
@@ -90,24 +96,34 @@ def draw_sprites(image, data):
         count=0
         global buttons
         buttons=[]
+        
         for sprite in db[face[1]]:
+            x_pos=x_main+(radius+30)*math.sin(math.pi*2.0*count/float(len(db[face[1]])))
+            y_pos=y_main+(radius+30)*math.cos(math.pi*2.0*count/float(len(db[face[1]])))
+            icon=0
             text="?"
             color=(0,0,0)
             if sprite.find("facebook")!=-1:
                 text="f"
                 color=(0,0,255)
+                icon=Image.open("icons/facebook.png")
             elif sprite.find("twitter")!=-1:
                 text="t"
                 color=(0,172,238)
+                icon=Image.open("icons/twitter.png")
             elif sprite.find("google")!=-1:
                 text="+"
                 color=(255,0,0)
+                icon=Image.open("icons/google.png")
             elif sprite.find("github")!=-1:
                 text="g"
                 color=(128,128,128)
-            x_pos=x_main+(radius+20)*math.sin(math.pi*2.0*count/float(len(db[face[1]])))
-            y_pos=y_main+(radius+20)*math.cos(math.pi*2.0*count/float(len(db[face[1]])))
-            image=draw_sprite(image, [x_pos, y_pos], color=color, text=text)
+                icon=Image.open("icons/github.png")
+            elif sprite.find("linkedin")!=-1:
+                text="l"
+                color=(0,128,0)
+                icon=Image.open("icons/linkedin.png")
+            image=draw_sprite(image, [x_pos, y_pos], color=color, text=text,icon=icon)
             buttons.append([[x_pos, y_pos],sprite])
             count+=1
             
@@ -162,7 +178,7 @@ def update_all(root, canvas, cam, fps_label):
         cv2.imwrite("broken.jpg",temp)
         global model
         [p_label, p_confidence] = model.predict(resized)
-        if(p_confidence>3000):
+        if(p_confidence>2800):
             #print p_label
             faces.append([[x1,y1,x2,y2],p_label])
         #print p_confidence
@@ -182,7 +198,7 @@ def update_all(root, canvas, cam, fps_label):
 def click(event):
     global buttons
     for button in buttons:
-        if event.x>button[0][0]-20 and event.x<button[0][0]+20 and event.y>button[0][1]-20 and event.y<button[0][1]+20:
+        if event.x>button[0][0]-30 and event.x<button[0][0]+30 and event.y>button[0][1]-30 and event.y<button[0][1]+30:
             webbrowser.open(button[1],new=2)
             
 if __name__ == '__main__':
@@ -215,9 +231,6 @@ if __name__ == '__main__':
     root.after(0, func=lambda: update_all(root, canvas, cam, fps_label))
     root.mainloop()
     del cam
-
-# <codecell>
-
 
 # <codecell>
 
