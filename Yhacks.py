@@ -178,10 +178,10 @@ def update_all(root, canvas, cam, fps_label):
         cv2.imwrite("broken.jpg",temp)
         global model
         [p_label, p_confidence] = model.predict(resized)
-        if(p_confidence>2800):
-            #print p_label
+        if(p_confidence>30):
             faces.append([[x1,y1,x2,y2],p_label])
-        #print p_confidence
+        print p_confidence
+        print p_label
         #print x1, y1, x2, y2
     draw_sprites(a,faces)
         
